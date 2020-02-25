@@ -1,4 +1,4 @@
-# Awesome
+# Awesome, Example Ocean Microservice
 
 
 Application Specific
