@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+        xmlns="http://maven.apache.org/POM/4.0.0"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>thaisamut.msa.framework</groupId>
+        <artifactId>msa-parent-pom</artifactId>
+        <version>0.6</version>
+    </parent>
+
+    <groupId>thaisamut.msa</groupId>
+    <artifactId>msa-awesome</artifactId>
+    <version>0.1-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <name>msa-awesome</name>
+    <description>
+
+    </description>
+
+    <properties>
+        <mainClass>thaisamut.msa.awesome.AwesomeApplication</mainClass>
+        <basePackage>thaisamut.msa.awesome</basePackage>
+        <domain>awesome</domain>
+        <project.skipbuild.react>true</project.skipbuild.react>
+        <trigger.jenkins.react.build>false</trigger.jenkins.react.build>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>thaisamut.msa.framework</groupId>
+            <artifactId>msa-framework</artifactId>
+        </dependency>
+    </dependencies>
+
+    <repositories>
+        <repository>
+            <id>thaisamut.repo</id>
+            <name>Thaisamut Maven Repository</name>
+            <layout>default</layout>
+            <url>http://maven.thaisamut.co.th</url>
+            <releases>
+                <updatePolicy>never</updatePolicy>
+                <checksumPolicy>warn</checksumPolicy>
+            </releases>
+            <snapshots>
+            </snapshots>
+        </repository>
+    </repositories>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <artifactId>maven-shade-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.0.2</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <mainClass>${mainClass}</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <!--
+                    enable debug :
+                    export MAVEN_OPTS="$MAVEN_OPTS -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=9400"
+                -->
+            </plugin>
+            <!--
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${project.basedir}/src/main/resources/apiclient/helloworld.yaml</inputSpec>
+                            <generatorName>java</generatorName>
+                            <apiPackage>thaisamut.apiclient.helloworld.api</apiPackage>
+                            <modelPackage>thaisamut.apiclient.helloworld.model</modelPackage>
+                            <invokerPackage>thaisamut.msa.framework.apiclient</invokerPackage>
+                            <library>jersey2</library>
+                            <generateApiDocumentation>false</generateApiDocumentation>
+                            <generateSupportingFiles>false</generateSupportingFiles>
+                            <generateApis>true</generateApis>
+                            <generateApiTests>true</generateApiTests>
+                            <generateModels>true</generateModels>
+                            <generateModelTests>false</generateModelTests>
+                            <addCompileSourceRoot>true</addCompileSourceRoot>
+                            <configOptions>
+                                <sourceFolder>./client</sourceFolder>
+                                <dateLibrary>joda</dateLibrary>
+                                <useGzipFeature>true</useGzipFeature>
+                                <java8>true</java8>
+                            </configOptions>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            -->
+        </plugins>
+    </build>
+
+</project>

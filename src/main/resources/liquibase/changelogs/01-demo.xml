@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="create-people-table" author="tone">
+        <createSequence sequenceName="sequence_people"/>
+        <createTable tableName="people">
+            <column name="id" type="numeric" defaultValue="nextval('sequence_people')">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="full_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="job_title" type="varchar(255)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-people-history-table" author="john">
+        <createSequence sequenceName="sequence_people_history"/>
+        <createTable tableName="people_history">
+            <column name="id" type="numeric" defaultValue="nextval('sequence_people_history')">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="people_id" type="numeric" >
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="full_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="job_title" type="varchar(255)"/>
+            <column name="create_date" remarks="วันที่ทำรายการ" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="create_by" remarks="ผู้ทำรายการ" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-address-table" author="john">
+        <createSequence sequenceName="sequence_address"/>
+        <createTable tableName="address">
+            <column name="id" type="int8" defaultValue="nextval('sequence_address')">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="street" type="varchar(255)"/>
+            <column name="city" type="varchar(255)"/>
+            <column name="state" type="varchar(255)"/>
+            <column name="zip" type="varchar(5)"/>
+            <column name="create_date" remarks="วันที่ทำรายการ" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="create_by" remarks="ผู้ทำรายการ" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="update_date" remarks="วันที่แก้ไขรายการ" type="timestamp"/>
+            <column name="update_by" remarks="ผู้แก้ไขรายการ" type="varchar(50)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-contacts-table" author="john">
+        <createSequence sequenceName="sequence_contacts"/>
+        <createTable tableName="contacts">
+            <column name="id" type="int8" defaultValue="nextval('sequence_contacts')">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="people_id" type="int8">
+                <constraints nullable="false"/>
+            </column>
+            <column name="address_id" type="int8" defaultValue="nextval('sequence_contacts')">
+                <constraints nullable="false"/>
+            </column>
+            <column name="create_date" remarks="วันที่ทำรายการ" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="create_by" remarks="ผู้ทำรายการ" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="update_date" remarks="วันที่แก้ไขรายการ" type="timestamp"/>
+            <column name="update_by" remarks="ผู้แก้ไขรายการ" type="varchar(50)"/>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

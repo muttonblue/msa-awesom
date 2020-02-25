@@ -1,0 +1,155 @@
+#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#++++++++++ Add ANY config at the bottom ++++++++++++++++++++++++++++++++++++++
+#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#+ System Properties and Variables
+#+ DW_HOME = Dropwizard home, base dir
+#+++
+
+swagger:
+  title: ${swaggerTitle}
+  version: ${swaggerVersion}
+  resourcePackage: ${swaggerResourcePackage}
+  contextRoot: /
+  swaggerStaticUriPrefix: .
+
+database:
+  # the name of your JDBC driver
+  driverClass: org.postgresql.Driver
+
+  # the username
+  user: ${dbUser}
+
+  # the password
+  password: ${dbPass}
+
+  # the JDBC URL
+  url: ${dbUrl}
+
+  # any properties specific to your JDBC driver:
+  properties:
+    charSet: UTF-8
+    # unit of seconds
+    #socketTimeout: 600
+    socketTimeout: ${dbStTimeOutSecs:-30}
+    loginTimeout: 5
+
+  # the maximum amount of time to wait on an empty pool before throwing an exception
+  maxWaitForConnection: 10s
+
+  # the SQL query to run when validating a connection's liveness
+  validationQuery: "/* MyService Health Check */ SELECT 1"
+
+  # the timeout before a connection validation queries fail
+  validationQueryTimeout: 3s
+
+  # the minimum number of connections to keep open
+  minSize: 10
+
+  # the maximum number of connections to keep open
+  maxSize: 30
+
+  # whether or not idle connections should be validated
+  checkConnectionWhileIdle: false
+
+  # the amount of time to sleep between runs of the idle connection validation, abandoned cleaner and idle pool resizing
+  evictionInterval: 10s
+
+  # the minimum amount of time an connection must sit idle in the pool before it is eligible for eviction
+  minIdleTime: 1 minute
+
+  #Semicolon separator
+  jdbcInterceptors: thaisamut.msa.framework.db.TrackingPGIDJDBCInterceptor;thaisamut.msa.framework.db.PGStatementTimeoutJDBCInterceptor(statementTimeoutSec=${dbStTimeOutSecs:-30})
+
+  #autoCommitByDefault: false
+
+views:
+  freemarker:
+    strict_syntax: true
+    template_loader: thaisamut.msa.framework.view.DevModeTemplateLoader()
+    default_encoding: UTF-8
+  mustache:
+    cache: false
+
+
+logging:
+  level: INFO
+  loggers:
+    # Overrides the level of com.example.dw.Thing and sets it to DEBUG.
+    "in": ERROR
+    "in.trace": TRACE
+    "org.springframework": DEBUG
+    "thaisamut.msa": DEBUG
+  appenders:
+    - type: console
+      threshold: ALL
+      queueSize: 512
+      discardingThreshold: 0
+      target: stdout
+      logFormat: "%-5p [%date{ddMMyy-HH:mm:ss.SSS}][%.-12t][%X{X-TRACE-ID:-na}] %c{0}: %m%n%rEx"
+    - type: file
+      logFormat: "%-5p [%date{ddMMyy-HH:mm:ss.SSS}][%.-12t][%X{X-TRACE-ID:-na}] %c{0}: %m%n%rEx"
+      # The file to which current statements will be logged.
+      currentLogFilename: ${DW_HOME}/logs/server.log
+      # When the log file rotates, the archived log will be renamed to this and gzipped. The
+      # %d is replaced with the previous day (yyyy-MM-dd). Custom rolling windows can be created
+      # by passing a SimpleDateFormat-compatible format as an argument: "%d{yyyy-MM-dd-hh}".
+      archivedLogFilenamePattern: ${DW_HOME}/logs/%d-server.log.gz
+      # The number of archived files to keep. 100 years is almost infinity
+      archivedFileCount: 36500
+      # The timezone used to format dates. HINT: USE THE DEFAULT, UTC.
+      timeZone: system
+
+server:
+  applicationConnectors:
+    - type: http
+      port: ${serverHttpPort}
+  adminConnectors:
+    - type: http
+      port: ${serverAdminPort}
+  requestLog:
+    appenders:
+      - type: file
+        currentLogFilename: ${DW_HOME}/logs/access.log
+        archivedLogFilenamePattern: ${DW_HOME}/logs/%d-access.log.gz
+
+jwtKeys:
+  - issuer: partner-gw
+    pubKey: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgxX7p5xGBZ22fH/NOy50Qx7UFc7C32uOjDkp03oy+Dfg5ZSPBjxYnQSOtLaQDfpLDTbPwTOyzjiKn+35v5YZmIZF0XB/gFeD/70NhzSql1lQVCV14qrMGQZR8vNMKWS2NTWbeNuLihwWp0jzP2M/KZ7QJA6Ln97K7B/0KpAOvLQZ6AKtl5yAP03y5lS/FdjXIK21/p/UEwdVPURyso5iBJW0mk0HY/uv05mexN1CoABsTwFXU6J2XMEFHiOZPM8opvOPeYfYGKW/OPA5PZdUcRpHFhlct6V98DFFynZwfsibZQmlMUCsXPDcYNYAa/ojzG8h2IXUR2jKnhPM5C7NfQIDAQAB
+  - issuer: oli-ad
+    pubKey: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA6YKye/vuZEsTAVm+U4MpJ5Yy/pqHA/MQODOoyF8dRHQ63AgWgp7ybnMFhsYg7/3g6u3XIcwrq6j/AX6NMk0MKeCG1MWlAdm4q1oc6zTXcTtALax29/3vQsWwvzLsrqo/QeJx9+etICdn5NH6ZfQ0k/HKBGrsYd2SSyOM6+IvgSjwXy14Zq+dDhDiccoyDkSChSFv58rUXsFW1rqG/cmY4GkCQ5siWK3KGjf6g1zJwkI7Vo5asw+ddBmBhR1WKbUniFqbkdt6SBwfJA8IB3VKy8ObKbDGPrVzFHhEFAwhQFagw40eiPSlhlqz0YwcbknLZ9Xx+Jh9E0r9/DxTGiU2+QIDAQAB
+  - issuer: intranet-gw
+    pubKey: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAmELwOY4ykRZ5FjlP5CcXKjxB1FmqQc3UCcBcvv58P9PbGsBcaaDBcgduCyQ6IF3ROd99xeS1E5X8lvPlNUj0Z7rovHXTYhiC8LsBrTkY/fnE5en8jdSC8xyb3/CiAYYo3acIMdhdcXSlL124jzScIApa8HqtfjFD0U83qikvS+mPQ9yYTjlzT8/yXNZdOtc0gKMgxzCb5/dikdPfGCdzD51ORPHXSnF1EC61/qyn1a8hJambqP0q4jpwoPt2W+URXZehFaGgzuLJJ7waUHoo29qE+W8aTGszQ+xJWl4Qe8DwhD9M716E2LDxU1bCK5Xd0vWY6IdXwkHBY1uavQ+KTwIDAQAB
+  - issuer: internal-gw
+    pubKey: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqfKFQQXWPF1JZjQY6RcjlTY1craUZWrLodPtilS6Qq+0MHTfKcMIyune/5CCmXlT3HdF+PGPkrLYjJUGC4zBEqhw1m30VNGpQV6S/ztoidDRmsTMXpATLumZuL6SVQjBl5z9fIuPoBNixoZqSYq0uzyp/8SM5O9nM+oJXcUzZ5Cfc9AVZWsTDomEdgimYZaMSd8vaIZJnNWGdpV2r79IdypnTO1bFd7Ru7ODVEC7ueYU055PDGGSjNg/MPNVUsdPH9giaIRt2CXkY+2Ldpd2sUhjIWJpvCFE4l/P9DVROat2yudN5vcWWONvXiSf3yiKYlKEkh10zSN1JOI84ygRqwIDAQAB
+  - issuer: legacy-gw
+    pubKey: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAi/cyFPtKjUyEnJhweJLOzyiBKmRDTysbvnfXL4QP5JN5/5iZ4X+Ouv9BxBey5oAokpr3rRFS+9yMsVh1wx6AWX6eqjIJh7lk1kiukjSotBmq3kk2KWnzmeDOXlc7ZlZTM/Ca68tubQ0QCw+j/WTywp4hjHiwqrguDlLXLSX1ybqGsHhJS+KBuOWxP1b2rZMAxe1302/UeA47G3EUTILHs8pglCzO2kXbjC488HIOxgjP6nqZG8oyN1gb1LMlhvfgKQSX8g3xN3cPR0UnFZX59rjYVZ2IOpb0YOup2SyyHAKI2G9ocAYCvpGF9h+5znB9+BZeERufU9cjocCx3lZRuwIDAQAB
+
+debugAuthorization: true
+
+applicationApiKey: unknown
+
+#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#++++++++++ END +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#++++++++++ Add any configs down here +++++++++++++++++++++++++++++++++++++++++
+#++++++++++    |----|                 +++++++++++++++++++++++++++++++++++++++++
+#++++++++++    |    |                 +++++++++++++++++++++++++++++++++++++++++
+#++++++++++ +---    ---+              +++++++++++++++++++++++++++++++++++++++++
+#++++++++++  \        /               +++++++++++++++++++++++++++++++++++++++++
+#++++++++++   \      /                +++++++++++++++++++++++++++++++++++++++++
+#++++++++++    \    /                 +++++++++++++++++++++++++++++++++++++++++
+#++++++++++     \  /                  +++++++++++++++++++++++++++++++++++++++++
+#++++++++++      \/                   +++++++++++++++++++++++++++++++++++++++++
+#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+override:
+  swaggerTitle: Awesome
+  swaggerVersion: 0.1-SNAPSHOT
+  swaggerResourcePackage: thaisamut.msa.awesome
+  dbUser: awesome
+  dbPass: nopass
+  dbUrl: jdbc:postgresql://127.0.0.1/awesome
+  dbStTimeOutSecs: 30
+  serverHttpPort: 2000
+  serverAdminPort: 3000
+

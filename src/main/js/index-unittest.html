@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- The first thing in any HTML file should be the charset -->
+    <meta charset="utf-8"/>
+
+    <!-- Make the page mobile compatible -->
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+    <!-- Allow installing the app to the homescreen -->
+    <meta name="mobile-web-app-capable" content="yes"/>
+
+    <!-- iOS home screen icons -->
+    <link rel="apple-touch-icon" sizes="120x120" href="../resources/assets/jsbuilt/images/oli-icon.png"/>
+    <link rel="apple-touch-icon" sizes="152x152" href="../resources/assets/jsbuilt/images/oli-icon.png"/>
+    <link rel="apple-touch-icon" sizes="167x167" href="../resources/assets/jsbuilt/images/oli-icon.png"/>
+    <link rel="apple-touch-icon" sizes="180x180" href="../resources/assets/jsbuilt/images/oli-icon.png"/>
+    <link rel="icon" href="../resources/assets/jsbuilt/images/oli-icon.png"/>
+    <link rel="stylesheet" href="../resources/assets/jsbuilt/vendor.bundle.css">
+
+</head>
+<body>
+<!-- Display a message if JS has been disabled on the browser. -->
+<noscript>If you're seeing this message, that means <strong>JavaScript has been disabled on your browser</strong>,
+    please <strong>enable JS</strong> to make this app work.
+</noscript>
+
+<!-- The app hooks into this div -->
+<div id="root" style="height: 100%">
+    <div class="sk-cube-grid">
+        <div class="sk-cube sk-cube1"></div>
+        <div class="sk-cube sk-cube2"></div>
+        <div class="sk-cube sk-cube3"></div>
+        <div class="sk-cube sk-cube4"></div>
+        <div class="sk-cube sk-cube5"></div>
+        <div class="sk-cube sk-cube6"></div>
+        <div class="sk-cube sk-cube7"></div>
+        <div class="sk-cube sk-cube8"></div>
+        <div class="sk-cube sk-cube9"></div>
+    </div>
+</div>
+
+
+<script>
+   const permissions = [];
+   permissions.push(123);
+   global = {
+            contextPath: "",
+            namespaceUrl: "",
+            staticResourceContextPath: "",
+            username: "mock",
+            fullName: "Mock Fullname",
+            lastLogon:
+            new Date() ,
+            permissions: permissions,
+            appVersion: '0.0.1',
+            UNITTEST: true,
+        };
+
+</script>
+
+<script src="../resources/assets/jsbuilt/app.bundle.js"></script>
+<script src="../resources/assets/jsbuilt/vendor.bundle.js"></script>
+
+</body>
+</html>
